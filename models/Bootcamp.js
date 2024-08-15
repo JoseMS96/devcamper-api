@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const BootcampSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please add a name'],
+    required: [true, 'Please add a name'], // Mongoose creates the error and blocks unnamed bootcamp creation
     unique: true,
     trim: true, // Remove espaços antes e depois do nome
     maxlength: [50, 'Name can not be more than 50 characters'],
