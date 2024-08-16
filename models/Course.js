@@ -40,8 +40,6 @@ const CourseSchema = new mongoose.Schema({
 
 // Método estático para calcular o custo médio de mensalidade
 CourseSchema.statics.getAverageCost = async function (bootcampId) {
-  console.log('Calculating avg cost...'.blue);
-
   const obj = await this.aggregate([
     {
       $match: { bootcamp: bootcampId },
@@ -53,8 +51,6 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
       },
     },
   ]);
-
-  console.log(obj);
 
   try {
     await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
