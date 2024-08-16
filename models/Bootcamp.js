@@ -134,7 +134,7 @@ BootcampSchema.pre('save', async function (next) {
 // Deleta cursos em cascada quando um bootcamp é deletado
 BootcampSchema.pre(
   'deleteOne',
-  { document: true, query: false },
+  { document: true, query: false }, // Sets pre hook as a document middleware
   async function (next) {
     console.log(`Courses being removed from bootcamp ${this._id}`);
     await this.model('Course').deleteMany({ bootcamp: this._id });
