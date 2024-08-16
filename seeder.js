@@ -3,24 +3,29 @@ const mongoose = require('mongoose');
 const colors = require('colors');
 const dotenv = require('dotenv');
 
-// Carregamento das variaveis de ambiente
+// Carrega variaveis de ambiente
 dotenv.config({ path: './config/config.env' });
 
-// Carregamento dos models
+// Carrega models -> para utilizar no Bootcamp.create(bootcamps);
 const Bootcamp = require('./models/Bootcamp');
+const Course = require('./models/Course');
 
-// Conexão ao BD
+// Conecta ao BD
 mongoose.connect(process.env.MONGO_URI);
 
-// Leitura dos arquivos JSON
+// Lê arquivos JSON
 const bootcamps = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8')
 );
+const courses = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8')
+);
 
-// Importando ao BD
+// Importa ao BD
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
+    await Course.create(courses);
 
     console.log('Data imported...'.green.inverse);
     process.exit();
@@ -29,11 +34,11 @@ const importData = async () => {
   }
 };
 
-// Delete data
+// Deleta dados
 const deleteData = async () => {
   try {
     await Bootcamp.deleteMany();
-
+    await Course.deleteMany();
     console.log('Data Obliterated...'.green.inverse);
     process.exit();
   } catch (err) {

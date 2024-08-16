@@ -27,7 +27,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
   console.log(queryStr);
 
   // Traz recursos
-  query = Bootcamp.find(JSON.parse(queryStr)); // 2 - filtering is very simple with Express and Mongoose
+  query = Bootcamp.find(JSON.parse(queryStr)).populate('courses'); // 2 - filtering is very simple with Express and Mongoose
 
   // Seleciona campos a serem trazidos| Ex: {{URL}}/api/v1/bootcamps?select=name,description : Traz só os campos nome e descrição dos bootcamps
   if (req.query.select) {
@@ -89,7 +89,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 
   if (!bootcamp) {
     return next(
-      new ErrorResponse(`Bootcamp not found with ID of ${req.params.id}`, 404) // Está com o formato correto mas o ID não foi encontrado no banco de dados
+      new ErrorResponse(`Bootcamp not found with ID of ${req.params.id}`, 404) // Acontece quando está com o formato correto mas o ID não foi encontrado no banco de dados
     ); // Has to have the return so the code doesn't "execute 2 responses"
   }
 
@@ -130,13 +130,15 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route   Post /api/v1/bootcamps/:id
 // @access  Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp not found with ID of ${req.params.id}`, 404)
     );
   }
+
+  await bootcamp.deleteOne();
 
   res.status(200).json({ success: true, data: {} });
 });
