@@ -8,7 +8,7 @@ const {
   deleteBootcamp,
   getBootcampsInRadius,
   bootcampPhotoUpload,
-} = require('../controllers/bootcamps');
+} = require('../controllers/bootcamps'); // Traz os métodos do import para este arquivo js, usando destructuring
 
 const Bootcamp = require('../models/Bootcamp');
 const advancedResults = require('../middleware/advancedResults');
@@ -22,11 +22,11 @@ const router = express.Router();
 router.use('/:bootcampId/courses', courseRouter);
 
 router
-  .route('/')
-  .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
+  .route('/') // Middleware Design: The Express framework is designed to automatically pass req, res, and next to all middleware functions.
+  .get(advancedResults(Bootcamp, 'courses'), getBootcamps) // Primeiro o express chama o método middleware advanced results e constrói a query lá dentro, depois ele chama o getBootcamps, nessa ordem
   .post(createBootcamp);
 
-router
+router // Se for só utilizar um tipo de request(get, put, etc), não é necessário utilizar o .route | Ex: router.post('/register', register);
   .route('/:id')
   .get(getBootcamp)
   .put(updateBootcamp)
