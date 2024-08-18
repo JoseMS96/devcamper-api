@@ -14,14 +14,16 @@ const Bootcamp = require('../models/Bootcamp');
 
 // Inclui router de outros recursos
 const courseRouter = require('./courses');
+const reviewRouter = require('./reviews');
 
 const router = express.Router();
 
 const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
-// Redireciona a router de outro recurso
+// Redireciona a router de outros recursos
 router.use('/:bootcampId/courses', courseRouter);
+router.use('/:bootcampId/reviews', reviewRouter);
 
 router
   .route('/') // Middleware Design: The Express framework is designed to automatically pass req, res, and next to all middleware functions.
