@@ -49,7 +49,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
-// @desc    Get current logged in user
+// @desc    Traz dados do usuário logado
 // @route   Get /api/v1/auth/me
 // @access  Private
 exports.getMe = asyncHandler(async (req, res, next) => {
@@ -105,7 +105,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // @desc    Resetar a senha
 // @route   PUT /api/v1/auth/resetpassword/:resettoken
 // @access  Public
-exports.resetpassword = asyncHandler(async (req, res, next) => {
+exports.resetPassword = asyncHandler(async (req, res, next) => {
   // Achar o token criptografado
   const resetPasswordToken = crypto
     .createHash('sha256')
@@ -152,3 +152,40 @@ const sendTokenResponse = (user, statusCode, res) => {
     .cookie('token', token, options)
     .json({ sucess: true, token });
 };
+
+// @desc    Atualiza dados do usuário logado
+// @route   PUT /api/v1/auth/updatedetails
+// @access  Private
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  const fieldsToUpdate = {
+    name: req.body.name,
+    email: req.body.email,
+  }; // Garante que não se pode atualizar a role ou senha do usuário
+
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    new: true,
+    fieldValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+// @desc    Atualiza a senha do usuário logado
+// @route   PUT /api/v1/auth/updatepassword
+// @access  Private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password'); // Traz a senha atual, o '+password' permite trazer a senha, o que normalmente não acontece
+
+  // Checa senha atual
+  if (!(await user.matchPassword(req.body.currentPassword))) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
+});
