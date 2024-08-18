@@ -30,7 +30,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @route   Post /api/v1/bootcamps
 // @access  Private
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
-  // Adiciona o ID do usuário ao req.body
+  // Adiciona o ID do usuário ao req.body | O ID vem do middleware (auth)
   req.body.user = req.user.id;
 
   // Checa bootcamps publicados
