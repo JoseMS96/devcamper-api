@@ -11,13 +11,13 @@ const {
 } = require('../controllers/bootcamps'); // Traz os métodos do import para este arquivo js, usando destructuring
 
 const Bootcamp = require('../models/Bootcamp');
-const advancedResults = require('../middleware/advancedResults');
 
 // Inclui router de outros recursos
 const courseRouter = require('./courses');
 
 const router = express.Router();
 
+const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
 // Redireciona a router de outro recurso
