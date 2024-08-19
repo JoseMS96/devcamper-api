@@ -2,9 +2,11 @@
 
 > Backend para a aplicação DevCamper, que é um website de bootcamps e cursos.
 
-## Website para acesso
+## Website
 
 https://devcamper-api-prod.onrender.com
+
+Deploy: API - Render | BD - MongoDB Atlas
 
 ## Como Usar (Ao clonar repositório)
 
